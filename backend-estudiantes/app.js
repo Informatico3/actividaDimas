@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
@@ -11,10 +12,16 @@ const errorMiddleware = require('./middlewares/errorMiddleware');
 app.use(express.json());
 app.use(helmet());
 app.use(cors());
+
+// Configuración segura de sesiones
 app.use(session({
-  secret: 'clave_secreta',
+  secret: 'clave_secreta', // Cambia esto por una clave segura desde el archivo .env
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI, // Almacena las sesiones en MongoDB
+    ttl: 14 * 24 * 60 * 60 // Tiempo de vida de las sesiones: 14 días
+  })
 }));
 
 // Conexión a MongoDB
@@ -36,5 +43,4 @@ app.use(errorMiddleware);
 
 // Configuración del puerto y arranque del servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
