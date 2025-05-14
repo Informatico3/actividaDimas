@@ -1,10 +1,12 @@
 require('dotenv').config(); 
+const express = require('express'); 
 const mongoose = require('mongoose');
 const session = require('express-session');
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
 const errorMiddleware = require('./middlewares/errorMiddleware'); 
+
 
 app.use(express.json());
 
