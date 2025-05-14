@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const MongoStore = require('connect-mongo'); // Usamos connect-mongo para sesiones seguras
+const MongoStore = require('connect-mongo');
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
@@ -15,12 +15,12 @@ app.use(cors());
 
 // Configuración segura de sesiones
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'clave_secreta', // Clave secreta desde .env
+  secret: process.env.SESSION_SECRET || 'clave_secreta',
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI, // Almacena las sesiones en MongoDB
-    ttl: 14 * 24 * 60 * 60 // Tiempo de vida de las sesiones: 14 días
+    mongoUrl: process.env.MONGODB_URI,
+    ttl: 14 * 24 * 60 * 60 // Tiempo de vida de las sesiones (14 días)
   })
 }));
 
